@@ -1,29 +1,42 @@
 const express = require('express');
 const cors = require('cors');
 const { nanoid } = require('nanoid');
+const { Pool } = require('pg');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Ganti username dan password sesuai keinginan kamu
 const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'gacor8754';
 const SESSION_TOKEN = nanoid(32);
 
-// Database sederhana pakai memory
-let links = [];
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+});
+
+// Buat tabel kalau belum ada
+pool.query(`
+  CREATE TABLE IF NOT EXISTS links (
+    id BIGSERIAL PRIMARY KEY,
+    alias TEXT UNIQUE NOT NULL,
+    dest TEXT NOT NULL,
+    password TEXT,
+    clicks INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT NOW()
+  )
+`).then(() => console.log('✅ Database siap!'))
+  .catch(err => console.error('❌ DB Error:', err));
 
 app.use(cors());
 app.use(express.json());
 
-// Middleware cek login
 function authCheck(req, res, next) {
   const token = req.headers['x-auth-token'];
   if (token !== SESSION_TOKEN) return res.status(401).json({ error: 'Unauthorized' });
   next();
 }
 
-// Login
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
   if (username === ADMIN_USER && password === ADMIN_PASS) {
@@ -33,42 +46,42 @@ app.post('/api/login', (req, res) => {
   }
 });
 
-// GET semua link
-app.get('/api/links', authCheck, (req, res) => {
-  res.json(links);
+app.get('/api/links', authCheck, async (req, res) => {
+  const result = await pool.query('SELECT * FROM links ORDER BY created_at DESC');
+  res.json(result.rows);
 });
 
-// Tambah link baru
-app.post('/api/links', authCheck, (req, res) => {
+app.post('/api/links', authCheck, async (req, res) => {
   const { dest, alias, password } = req.body;
   if (!dest) return res.status(400).json({ error: 'URL tujuan wajib diisi' });
   const finalAlias = alias || nanoid(6);
-  if (links.find(l => l.alias === finalAlias)) {
-    return res.status(400).json({ error: 'Alias sudah dipakai!' });
+  try {
+    await pool.query('INSERT INTO links (alias, dest, password) VALUES ($1, $2, $3)', [finalAlias, dest, password || null]);
+    res.json({ success: true, alias: finalAlias });
+  } catch (e) {
+    res.status(400).json({ error: 'Alias sudah dipakai!' });
   }
-  const link = { id: Date.now(), alias: finalAlias, dest, password: password || null, clicks: 0, created_at: new Date().toISOString() };
-  links.unshift(link);
-  res.json({ success: true, alias: finalAlias });
 });
 
-// Edit link
-app.put('/api/links/:alias', authCheck, (req, res) => {
+app.put('/api/links/:alias', authCheck, async (req, res) => {
   const { dest, newAlias, password } = req.body;
-  const idx = links.findIndex(l => l.alias === req.params.alias);
-  if (idx === -1) return res.status(404).json({ error: 'Link tidak ditemukan' });
-  links[idx] = { ...links[idx], dest, alias: newAlias || req.params.alias, password: password || null };
+  const { alias } = req.params;
+  try {
+    await pool.query('UPDATE links SET dest=$1, alias=$2, password=$3 WHERE alias=$4', [dest, newAlias || alias, password || null, alias]);
+    res.json({ success: true });
+  } catch (e) {
+    res.status(400).json({ error: 'Gagal update!' });
+  }
+});
+
+app.delete('/api/links/:alias', authCheck, async (req, res) => {
+  await pool.query('DELETE FROM links WHERE alias=$1', [req.params.alias]);
   res.json({ success: true });
 });
 
-// Hapus link
-app.delete('/api/links/:alias', authCheck, (req, res) => {
-  links = links.filter(l => l.alias !== req.params.alias);
-  res.json({ success: true });
-});
-
-// Redirect short link
-app.get('/:alias', (req, res) => {
-  const link = links.find(l => l.alias === req.params.alias);
+app.get('/:alias', async (req, res) => {
+  const result = await pool.query('SELECT * FROM links WHERE alias=$1', [req.params.alias]);
+  const link = result.rows[0];
   if (!link) return res.status(404).send('Link tidak ditemukan!');
 
   if (link.password) {
@@ -122,16 +135,16 @@ app.get('/:alias', (req, res) => {
     `);
   }
 
-  link.clicks++;
+  await pool.query('UPDATE links SET clicks=clicks+1 WHERE alias=$1', [req.params.alias]);
   res.redirect(link.dest);
 });
 
-// Unlock dengan password
-app.post('/api/unlock/:alias', (req, res) => {
-  const link = links.find(l => l.alias === req.params.alias);
+app.post('/api/unlock/:alias', async (req, res) => {
+  const result = await pool.query('SELECT * FROM links WHERE alias=$1', [req.params.alias]);
+  const link = result.rows[0];
   if (!link) return res.status(404).json({ error: 'Link tidak ditemukan' });
   if (link.password !== req.body.password) return res.status(401).json({ error: 'Password salah' });
-  link.clicks++;
+  await pool.query('UPDATE links SET clicks=clicks+1 WHERE alias=$1', [req.params.alias]);
   res.json({ url: link.dest });
 });
 
