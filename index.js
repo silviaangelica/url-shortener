@@ -1,27 +1,17 @@
 const express = require('express');
-const Database = require('better-sqlite3');
 const cors = require('cors');
 const { nanoid } = require('nanoid');
 
 const app = express();
-const db = new Database('links.db');
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Ganti username dan password sesuai keinginan kamu
 const ADMIN_USER = 'admin';
-const ADMIN_PASS = 'gacor789456';
+const ADMIN_PASS = 'gacor8754';
 const SESSION_TOKEN = nanoid(32);
 
-db.exec(`
-  CREATE TABLE IF NOT EXISTS links (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    alias TEXT UNIQUE NOT NULL,
-    dest TEXT NOT NULL,
-    password TEXT,
-    clicks INTEGER DEFAULT 0,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  )
-`);
+// Database sederhana pakai memory
+let links = [];
 
 app.use(cors());
 app.use(express.json());
@@ -43,46 +33,42 @@ app.post('/api/login', (req, res) => {
   }
 });
 
-// GET semua link (perlu login)
+// GET semua link
 app.get('/api/links', authCheck, (req, res) => {
-  const links = db.prepare('SELECT * FROM links ORDER BY created_at DESC').all();
   res.json(links);
 });
 
-// Tambah link baru (perlu login)
+// Tambah link baru
 app.post('/api/links', authCheck, (req, res) => {
   const { dest, alias, password } = req.body;
   if (!dest) return res.status(400).json({ error: 'URL tujuan wajib diisi' });
   const finalAlias = alias || nanoid(6);
-  try {
-    db.prepare('INSERT INTO links (alias, dest, password) VALUES (?, ?, ?)').run(finalAlias, dest, password || null);
-    res.json({ success: true, alias: finalAlias });
-  } catch (e) {
-    res.status(400).json({ error: 'Alias sudah dipakai!' });
+  if (links.find(l => l.alias === finalAlias)) {
+    return res.status(400).json({ error: 'Alias sudah dipakai!' });
   }
+  const link = { id: Date.now(), alias: finalAlias, dest, password: password || null, clicks: 0, created_at: new Date().toISOString() };
+  links.unshift(link);
+  res.json({ success: true, alias: finalAlias });
 });
 
-// Edit link (perlu login)
+// Edit link
 app.put('/api/links/:alias', authCheck, (req, res) => {
   const { dest, newAlias, password } = req.body;
-  const { alias } = req.params;
-  try {
-    db.prepare('UPDATE links SET dest=?, alias=?, password=? WHERE alias=?').run(dest, newAlias || alias, password || null, alias);
-    res.json({ success: true });
-  } catch (e) {
-    res.status(400).json({ error: 'Gagal update!' });
-  }
+  const idx = links.findIndex(l => l.alias === req.params.alias);
+  if (idx === -1) return res.status(404).json({ error: 'Link tidak ditemukan' });
+  links[idx] = { ...links[idx], dest, alias: newAlias || req.params.alias, password: password || null };
+  res.json({ success: true });
 });
 
-// Hapus link (perlu login)
+// Hapus link
 app.delete('/api/links/:alias', authCheck, (req, res) => {
-  db.prepare('DELETE FROM links WHERE alias=?').run(req.params.alias);
+  links = links.filter(l => l.alias !== req.params.alias);
   res.json({ success: true });
 });
 
 // Redirect short link
 app.get('/:alias', (req, res) => {
-  const link = db.prepare('SELECT * FROM links WHERE alias=?').get(req.params.alias);
+  const link = links.find(l => l.alias === req.params.alias);
   if (!link) return res.status(404).send('Link tidak ditemukan!');
 
   if (link.password) {
@@ -95,14 +81,14 @@ app.get('/:alias', (req, res) => {
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
         <style>
           * { box-sizing: border-box; margin: 0; padding: 0; }
-          body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f0f0f5; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+          body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f0f0f5; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
           .dots { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(#c7c7e0 1px, transparent 1px); background-size: 28px 28px; z-index: 0; }
           .card { background: #fff; border-radius: 16px; padding: 40px 36px; width: 380px; max-width: 95vw; position: relative; z-index: 1; box-shadow: 0 4px 32px rgba(0,0,0,0.08); }
-          .logo { font-size: 22px; font-weight: 800; color: #6366f1; text-align: center; letter-spacing: 1px; margin-bottom: 28px; }
+          .logo { font-size: 22px; font-weight: 800; color: #6366f1; text-align: center; margin-bottom: 28px; }
           .form-label { font-size: 11px; font-weight: 700; color: #888; letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 8px; }
           .form-group { margin-bottom: 18px; }
-          input { width: 100%; border: 1.5px solid #e5e7eb; border-radius: 9px; padding: 12px 14px; font-size: 14px; font-family: inherit; outline: none; transition: border .15s; }
-          input:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.12); }
+          input { width: 100%; border: 1.5px solid #e5e7eb; border-radius: 9px; padding: 12px 14px; font-size: 14px; font-family: inherit; outline: none; }
+          input:focus { border-color: #6366f1; }
           .btn { width: 100%; background: #6366f1; color: #fff; border: none; border-radius: 9px; padding: 13px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; }
           .btn:hover { background: #4f46e5; }
           .error { color: #ef4444; font-size: 13px; margin-top: 12px; text-align: center; display: none; }
@@ -136,15 +122,21 @@ app.get('/:alias', (req, res) => {
     `);
   }
 
-  db.prepare('UPDATE links SET clicks=clicks+1 WHERE alias=?').run(req.params.alias);
+  link.clicks++;
   res.redirect(link.dest);
 });
 
 // Unlock dengan password
 app.post('/api/unlock/:alias', (req, res) => {
-  const link = db.prepare('SELECT * FROM links WHERE alias=?').get(req.params.alias);
+  const link = links.find(l => l.alias === req.params.alias);
   if (!link) return res.status(404).json({ error: 'Link tidak ditemukan' });
   if (link.password !== req.body.password) return res.status(401).json({ error: 'Password salah' });
-  db.prepare('UPDATE links SET clicks=clicks+1 WHERE alias=?').run(req.params.alias);
+  link.clicks++;
   res.json({ url: link.dest });
+});
+
+app.use(express.static('public'));
+
+app.listen(PORT, () => {
+  console.log(`✅ Server berjalan di http://localhost:${PORT}`);
 });
