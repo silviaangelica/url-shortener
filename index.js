@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 
 const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'gacor8754';
-const SESSION_TOKEN = nanoid(32);
+const SESSION_TOKEN = process.env.SESSION_TOKEN || 'token-rahasia-klxlat-2026';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
