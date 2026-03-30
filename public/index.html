@@ -267,22 +267,8 @@
   </div>
 </div>
 
-<!-- MODAL QR -->
-<div class="modal-overlay" id="qr-modal" onclick="closeQROutside(event)">
-  <div class="modal qr-modal">
-    <h2 class="modal-title">QR Code</h2>
-    <div id="qr-container"></div>
-    <p id="qr-url" style="font-size:13px;color:var(--text-muted);margin-bottom:16px;word-break:break-all;"></p>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeQR()">Tutup</button>
-      <button class="btn btn-primary" onclick="downloadQR()">⬇️ Download</button>
-    </div>
-  </div>
-</div>
-
 <div class="toast" id="toast"><span id="toast-icon">✓</span><span id="toast-msg">Berhasil!</span></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 const API = 'https://url-shortener-fec6.onrender.com';
 let token = localStorage.getItem('admin_token') || '';
@@ -383,7 +369,6 @@ function renderTable() {
         <td><input type="checkbox" class="cb" ${isSelected ? 'checked' : ''} onchange="toggleRow('${link.alias}', this.checked)"></td>
         <td>
           <div style="display:flex;align-items:center;gap:10px">
-            <div id="qr-${link.alias}" style="cursor:pointer" onclick="showQR('${link.alias}','${short}')"></div>
             <div>
               <div>
                 <span class="url-short-link" onclick="copyURL('${short}')">${short}</span>
@@ -535,26 +520,6 @@ async function deleteURL(alias) {
 }
 
 function copyURL(url) { navigator.clipboard.writeText(url).then(() => showToast('Link disalin! 📋')); }
-
-// ── QR ──
-let currentQRUrl = '';
-function showQR(alias, url) {
-  currentQRUrl = url;
-  document.getElementById('qr-container').innerHTML = '';
-  document.getElementById('qr-url').textContent = url;
-  new QRCode(document.getElementById('qr-container'), { text: url, width: 200, height: 200, correctLevel: QRCode.CorrectLevel.H });
-  document.getElementById('qr-modal').classList.add('open');
-}
-function closeQR() { document.getElementById('qr-modal').classList.remove('open'); }
-function closeQROutside(e) { if (e.target.id === 'qr-modal') closeQR(); }
-function downloadQR() {
-  const canvas = document.querySelector('#qr-container canvas');
-  if (!canvas) return;
-  const a = document.createElement('a');
-  a.download = 'qrcode.png';
-  a.href = canvas.toDataURL();
-  a.click();
-}
 
 // ── TOAST ──
 let toastTimer;
