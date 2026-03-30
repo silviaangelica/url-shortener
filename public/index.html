@@ -440,7 +440,7 @@ function toggleAll() {
 
 function updateSelectionUI() {
   const n = selectedAliases.size;
-  document.getElementById('btn-edit-sel').style.display = n === 1 ? 'inline-flex' : 'none';
+  document.getElementById('btn-edit-sel').style.display = n >= 1 ? 'inline-flex' : 'none';
   document.getElementById('btn-del-sel').style.display = n > 0 ? 'inline-flex' : 'none';
 }
 
