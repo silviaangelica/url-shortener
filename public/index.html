@@ -4,19 +4,70 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AdminPanel — URL Shortener</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0f1117; --sidebar: #161b27; --sidebar-border: #1e2535;
-    --card: #1a1f2e; --card-border: #232a3b; --accent: #3b82f6;
-    --accent-hover: #2563eb; --accent-soft: rgba(59,130,246,0.12);
+    --card: #1a1f2e; --card-border: #232a3b; --accent: #6366f1;
+    --accent-hover: #4f46e5; --accent-soft: rgba(99,102,241,0.12);
     --green: #22c55e; --red: #ef4444; --red-soft: rgba(239,68,68,0.12);
     --yellow: #f59e0b; --text: #e2e8f0; --text-muted: #64748b;
     --text-dim: #94a3b8; --font: 'Plus Jakarta Sans', sans-serif;
     --mono: 'JetBrains Mono', monospace;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font); background: var(--bg); color: var(--text); display: flex; min-height: 100vh; font-size: 14px; }
+  body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; }
+
+  /* LOGIN PAGE */
+  #login-page {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; background: #f0f0f5; flex-direction: column;
+  }
+  .dots-bg {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: radial-gradient(#c7c7e0 1px, transparent 1px);
+    background-size: 28px 28px; z-index: 0;
+  }
+  .login-card {
+    background: #fff; border-radius: 16px; padding: 40px 36px;
+    width: 380px; max-width: 95vw; position: relative; z-index: 1;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+  }
+  .login-logo {
+    font-size: 22px; font-weight: 800; color: #6366f1;
+    text-align: center; letter-spacing: 1px; margin-bottom: 28px;
+  }
+  .login-label {
+    font-size: 11px; font-weight: 700; color: #888;
+    letter-spacing: 1px; text-transform: uppercase;
+    display: block; margin-bottom: 8px;
+  }
+  .login-group { margin-bottom: 18px; }
+  .login-input {
+    width: 100%; border: 1.5px solid #e5e7eb; border-radius: 9px;
+    padding: 12px 14px; font-size: 14px; font-family: inherit;
+    outline: none; transition: border .15s; color: #1e1e2e;
+  }
+  .login-input:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.12); }
+  .login-btn {
+    width: 100%; background: #6366f1; color: #fff; border: none;
+    border-radius: 9px; padding: 13px; font-size: 15px; font-weight: 700;
+    cursor: pointer; font-family: inherit; transition: background .15s;
+  }
+  .login-btn:hover { background: #4f46e5; }
+  .login-error {
+    color: #ef4444; font-size: 13px; margin-top: 12px;
+    text-align: center; display: none;
+  }
+  .login-quote {
+    position: fixed; bottom: 28px; text-align: center;
+    color: #888; font-size: 13px; z-index: 1; padding: 0 20px;
+  }
+  .login-quote span { display: block; color: #aaa; font-size: 12px; margin-top: 4px; }
+
+  /* DASHBOARD */
+  #dashboard-page { display: none; }
+  .app { display: flex; min-height: 100vh; }
   .sidebar { width: 220px; min-height: 100vh; background: var(--sidebar); border-right: 1px solid var(--sidebar-border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; }
   .sidebar-logo { display: flex; align-items: center; gap: 10px; padding: 20px 18px; border-bottom: 1px solid var(--sidebar-border); }
   .logo-icon { width: 34px; height: 34px; background: linear-gradient(135deg, var(--accent), #8b5cf6); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
@@ -25,6 +76,7 @@
   .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; cursor: pointer; color: var(--text-muted); font-weight: 500; font-size: 13.5px; transition: all .18s; margin-bottom: 2px; }
   .nav-item:hover { background: rgba(255,255,255,0.05); color: var(--text-dim); }
   .nav-item.active { background: var(--accent-soft); color: var(--accent); }
+  .sidebar-footer { padding: 14px 10px; border-top: 1px solid var(--sidebar-border); }
   .main { margin-left: 220px; flex: 1; display: flex; flex-direction: column; }
   .topbar { height: 56px; background: var(--sidebar); border-bottom: 1px solid var(--sidebar-border); display: flex; align-items: center; padding: 0 28px; gap: 10px; position: sticky; top: 0; z-index: 50; }
   .topbar-page { color: var(--accent); font-weight: 600; font-size: 13px; }
@@ -48,13 +100,13 @@
   .url-card:hover { border-color: var(--accent); }
   .url-indicator { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); flex-shrink: 0; }
   .url-info { flex: 1; min-width: 0; }
-  .url-short { font-family: var(--mono); font-size: 13px; color: var(--accent); font-weight: 500; cursor: pointer; display: inline-block; }
+  .url-short { font-family: var(--mono); font-size: 13px; color: var(--accent); font-weight: 500; cursor: pointer; }
   .url-short:hover { text-decoration: underline; }
   .url-dest { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
-  .url-clicks { font-size: 11px; color: var(--yellow); margin-top: 2px; }
+  .url-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
   .url-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
   .icon-btn { width: 32px; height: 32px; border-radius: 7px; border: 1px solid var(--card-border); background: transparent; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; }
-  .icon-btn:hover { background: rgba(255,255,255,0.08); color: var(--text); }
+  .icon-btn:hover { background: rgba(255,255,255,0.08); }
   .icon-btn.copy:hover { background: var(--accent-soft); color: var(--accent); }
   .icon-btn.edit:hover { background: rgba(245,158,11,0.12); color: var(--yellow); }
   .icon-btn.delete:hover { background: var(--red-soft); color: var(--red); }
@@ -75,53 +127,87 @@
   .toast.error { border-color: var(--red); color: var(--red); }
   .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
   .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+  .lock-badge { font-size: 10px; background: rgba(245,158,11,0.15); color: var(--yellow); border-radius: 4px; padding: 2px 6px; margin-left: 6px; }
 </style>
 </head>
 <body>
 
-<aside class="sidebar">
-  <div class="sidebar-logo">
-    <div class="logo-icon">🔗</div>
-    <span class="logo-text">AdminPanel</span>
-  </div>
-  <nav class="sidebar-nav">
-    <div class="nav-item active">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      Dashboard
+<!-- LOGIN PAGE -->
+<div id="login-page">
+  <div class="dots-bg"></div>
+  <div class="login-card">
+    <div class="login-logo">KLX.LAT</div>
+    <div class="login-group">
+      <label class="login-label">Username</label>
+      <input type="text" class="login-input" id="login-user" placeholder="Enter your username" onkeydown="if(event.key==='Enter') doLogin()">
     </div>
-  </nav>
-</aside>
+    <div class="login-group">
+      <label class="login-label">Password</label>
+      <input type="password" class="login-input" id="login-pass" placeholder="••••••••••" onkeydown="if(event.key==='Enter') doLogin()">
+    </div>
+    <button class="login-btn" onclick="doLogin()">Sign in</button>
+    <div class="login-error" id="login-error">❌ Username atau password salah!</div>
+  </div>
+  <div class="login-quote">
+    Kamu itu lebih berani dari yang kamu yakini.
+    <span>— Christopher Robin</span>
+  </div>
+</div>
 
-<main class="main">
-  <div class="topbar">
-    <span style="color:var(--text-muted);font-size:13px">Home /</span>
-    <span class="topbar-page">Dashboard</span>
+<!-- DASHBOARD PAGE -->
+<div id="dashboard-page">
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon">🔗</div>
+        <span class="logo-text">AdminPanel</span>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-item active">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Dashboard
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="nav-item" style="color:#ef4444" onclick="doLogout()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1"/></svg>
+          Logout
+        </div>
+      </div>
+    </aside>
+    <main class="main">
+      <div class="topbar">
+        <span style="color:var(--text-muted);font-size:13px">Home /</span>
+        <span class="topbar-page">Dashboard</span>
+      </div>
+      <div class="content">
+        <div class="page-header">
+          <h1 class="page-title">Dashboard</h1>
+          <button class="btn btn-primary" onclick="openAddModal()">+ Add New URL</button>
+        </div>
+        <div class="stats-bar">
+          <div class="stat-card"><div class="stat-label">Total Links</div><div class="stat-value blue" id="stat-total">0</div></div>
+          <div class="stat-card"><div class="stat-label">Active Links</div><div class="stat-value green" id="stat-active">0</div></div>
+          <div class="stat-card"><div class="stat-label">Total Clicks</div><div class="stat-value yellow" id="stat-clicks">0</div></div>
+        </div>
+        <div class="url-list" id="url-list"></div>
+        <div class="empty-state" id="empty-state" style="display:none">
+          <div class="icon">🔗</div>
+          <p>Belum ada short link. Buat yang pertama!</p>
+          <button class="btn btn-primary" onclick="openAddModal()">+ Add New URL</button>
+        </div>
+      </div>
+    </main>
   </div>
-  <div class="content">
-    <div class="page-header">
-      <h1 class="page-title">Dashboard</h1>
-      <button class="btn btn-primary" onclick="openAddModal()">+ Add New URL</button>
-    </div>
-    <div class="stats-bar">
-      <div class="stat-card"><div class="stat-label">Total Links</div><div class="stat-value blue" id="stat-total">0</div></div>
-      <div class="stat-card"><div class="stat-label">Active Links</div><div class="stat-value green" id="stat-active">0</div></div>
-      <div class="stat-card"><div class="stat-label">Total Clicks</div><div class="stat-value yellow" id="stat-clicks">0</div></div>
-    </div>
-    <div class="url-list" id="url-list"></div>
-    <div class="empty-state" id="empty-state" style="display:none">
-      <div class="icon">🔗</div>
-      <p>Belum ada short link. Buat yang pertama!</p>
-      <button class="btn btn-primary" onclick="openAddModal()">+ Add New URL</button>
-    </div>
-  </div>
-</main>
+</div>
 
+<!-- MODAL -->
 <div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
   <div class="modal">
     <h2 class="modal-title" id="modal-title">Add New URL</h2>
     <div class="form-group">
       <label class="form-label">Destination URL *</label>
-      <input type="url" class="form-input" id="input-dest" placeholder="https://example.com/halaman-panjang">
+      <input type="url" class="form-input" id="input-dest" placeholder="https://example.com">
     </div>
     <div class="form-group">
       <label class="form-label">Custom Alias (opsional)</label>
@@ -145,16 +231,61 @@
 
 <script>
 const API = 'https://url-shortener-fec6.onrender.com';
+let token = localStorage.getItem('admin_token') || '';
 let editingAlias = null;
 
+// ── LOGIN ──
+async function doLogin() {
+  const username = document.getElementById('login-user').value.trim();
+  const password = document.getElementById('login-pass').value.trim();
+  try {
+    const res = await fetch(`${API}/api/login`, {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (data.token) {
+      token = data.token;
+      localStorage.setItem('admin_token', token);
+      showDashboard();
+    } else {
+      document.getElementById('login-error').style.display = 'block';
+    }
+  } catch {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+
+function doLogout() {
+  localStorage.removeItem('admin_token');
+  token = '';
+  document.getElementById('dashboard-page').style.display = 'none';
+  document.getElementById('login-page').style.display = 'flex';
+}
+
+function showDashboard() {
+  document.getElementById('login-page').style.display = 'none';
+  document.getElementById('dashboard-page').style.display = 'block';
+  loadLinks();
+}
+
+// Cek kalau sudah login
+async function checkAuth() {
+  if (!token) return;
+  try {
+    const res = await fetch(`${API}/api/links`, { headers: {'x-auth-token': token} });
+    if (res.ok) showDashboard();
+  } catch {}
+}
+
+// ── LINKS ──
 async function loadLinks() {
   try {
-    const res = await fetch(`${API}/api/links`);
+    const res = await fetch(`${API}/api/links`, { headers: {'x-auth-token': token} });
+    if (res.status === 401) { doLogout(); return; }
     const links = await res.json();
     renderLinks(links);
-  } catch {
-    showToast('Gagal konek ke server!', 'error');
-  }
+  } catch { showToast('Gagal konek ke server!', 'error'); }
 }
 
 function renderLinks(links) {
@@ -167,15 +298,16 @@ function renderLinks(links) {
   if (links.length === 0) { empty.style.display = 'block'; return; }
   empty.style.display = 'none';
   links.forEach(link => {
-    const short = `${API}/${link.alias}`;
+    const short = `https://klx.lat/${link.alias}`;
     const card = document.createElement('div');
     card.className = 'url-card';
     card.innerHTML = `
       <div class="url-indicator"></div>
       <div class="url-info">
         <span class="url-short" onclick="copyURL('${short}')">${short}</span>
+        ${link.password ? '<span class="lock-badge">🔒 Terkunci</span>' : ''}
         <div class="url-dest">${link.dest}</div>
-        <div class="url-clicks">👆 ${link.clicks || 0} klik</div>
+        <div class="url-meta">👆 ${link.clicks || 0} klik</div>
       </div>
       <div class="url-actions">
         <button class="icon-btn copy" onclick="copyURL('${short}')" title="Copy">
@@ -198,6 +330,7 @@ function openAddModal() {
   document.getElementById('save-btn').textContent = 'Simpan';
   document.getElementById('input-dest').value = '';
   document.getElementById('input-alias').value = '';
+  document.getElementById('input-password').value = '';
   document.getElementById('modal').classList.add('open');
 }
 
@@ -207,6 +340,7 @@ function openEditModal(alias, dest) {
   document.getElementById('save-btn').textContent = 'Update';
   document.getElementById('input-dest').value = dest;
   document.getElementById('input-alias').value = alias;
+  document.getElementById('input-password').value = '';
   document.getElementById('modal').classList.add('open');
 }
 
@@ -222,12 +356,12 @@ async function saveURL() {
     let res;
     if (editingAlias) {
       res = await fetch(`${API}/api/links/${editingAlias}`, {
-        method: 'PUT', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ dest, newAlias: alias || editingAlias })
+        method: 'PUT', headers: {'Content-Type': 'application/json', 'x-auth-token': token},
+        body: JSON.stringify({ dest, newAlias: alias || editingAlias, password })
       });
     } else {
       res = await fetch(`${API}/api/links`, {
-        method: 'POST', headers: {'Content-Type':'application/json'},
+        method: 'POST', headers: {'Content-Type': 'application/json', 'x-auth-token': token},
         body: JSON.stringify({ dest, alias, password })
       });
     }
@@ -241,7 +375,7 @@ async function saveURL() {
 
 async function deleteURL(alias) {
   if (!confirm('Hapus short link ini?')) return;
-  await fetch(`${API}/api/links/${alias}`, { method: 'DELETE' });
+  await fetch(`${API}/api/links/${alias}`, { method: 'DELETE', headers: {'x-auth-token': token} });
   loadLinks();
   showToast('Link dihapus!', 'error');
 }
@@ -266,7 +400,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && document.getElementById('modal').classList.contains('open')) saveURL();
 });
 
-loadLinks();
+checkAuth();
 </script>
 </body>
 </html>
