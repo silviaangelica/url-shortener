@@ -18,51 +18,19 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; }
 
-  /* LOGIN PAGE */
-  #login-page {
-    display: flex; align-items: center; justify-content: center;
-    min-height: 100vh; background: #f0f0f5; flex-direction: column;
-  }
-  .dots-bg {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background-image: radial-gradient(#c7c7e0 1px, transparent 1px);
-    background-size: 28px 28px; z-index: 0;
-  }
-  .login-card {
-    background: #fff; border-radius: 16px; padding: 40px 36px;
-    width: 380px; max-width: 95vw; position: relative; z-index: 1;
-    box-shadow: 0 4px 32px rgba(0,0,0,0.08);
-  }
-  .login-logo {
-    font-size: 22px; font-weight: 800; color: #6366f1;
-    text-align: center; letter-spacing: 1px; margin-bottom: 28px;
-  }
-  .login-label {
-    font-size: 11px; font-weight: 700; color: #888;
-    letter-spacing: 1px; text-transform: uppercase;
-    display: block; margin-bottom: 8px;
-  }
+  /* LOGIN */
+  #login-page { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #f0f0f5; flex-direction: column; }
+  .dots-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(#c7c7e0 1px, transparent 1px); background-size: 28px 28px; z-index: 0; }
+  .login-card { background: #fff; border-radius: 16px; padding: 40px 36px; width: 380px; max-width: 95vw; position: relative; z-index: 1; box-shadow: 0 4px 32px rgba(0,0,0,0.08); }
+  .login-logo { font-size: 22px; font-weight: 800; color: #6366f1; text-align: center; letter-spacing: 1px; margin-bottom: 28px; }
+  .login-label { font-size: 11px; font-weight: 700; color: #888; letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 8px; }
   .login-group { margin-bottom: 18px; }
-  .login-input {
-    width: 100%; border: 1.5px solid #e5e7eb; border-radius: 9px;
-    padding: 12px 14px; font-size: 14px; font-family: inherit;
-    outline: none; transition: border .15s; color: #1e1e2e;
-  }
+  .login-input { width: 100%; border: 1.5px solid #e5e7eb; border-radius: 9px; padding: 12px 14px; font-size: 14px; font-family: inherit; outline: none; transition: border .15s; color: #1e1e2e; }
   .login-input:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.12); }
-  .login-btn {
-    width: 100%; background: #6366f1; color: #fff; border: none;
-    border-radius: 9px; padding: 13px; font-size: 15px; font-weight: 700;
-    cursor: pointer; font-family: inherit; transition: background .15s;
-  }
+  .login-btn { width: 100%; background: #6366f1; color: #fff; border: none; border-radius: 9px; padding: 13px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; }
   .login-btn:hover { background: #4f46e5; }
-  .login-error {
-    color: #ef4444; font-size: 13px; margin-top: 12px;
-    text-align: center; display: none;
-  }
-  .login-quote {
-    position: fixed; bottom: 28px; text-align: center;
-    color: #888; font-size: 13px; z-index: 1; padding: 0 20px;
-  }
+  .login-error { color: #ef4444; font-size: 13px; margin-top: 12px; text-align: center; display: none; }
+  .login-quote { position: fixed; bottom: 28px; text-align: center; color: #888; font-size: 13px; z-index: 1; padding: 0 20px; }
   .login-quote span { display: block; color: #aaa; font-size: 12px; margin-top: 4px; }
 
   /* DASHBOARD */
@@ -81,12 +49,18 @@
   .topbar { height: 56px; background: var(--sidebar); border-bottom: 1px solid var(--sidebar-border); display: flex; align-items: center; padding: 0 28px; gap: 10px; position: sticky; top: 0; z-index: 50; }
   .topbar-page { color: var(--accent); font-weight: 600; font-size: 13px; }
   .content { padding: 28px; flex: 1; }
-  .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+  .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
   .page-title { font-size: 24px; font-weight: 700; }
   .btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 18px; border-radius: 8px; border: none; cursor: pointer; font-family: var(--font); font-size: 13.5px; font-weight: 600; transition: all .18s; }
   .btn-primary { background: var(--accent); color: #fff; }
   .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
   .btn-ghost { background: rgba(255,255,255,0.06); color: var(--text-dim); border: 1px solid var(--card-border); }
+  .btn-danger { background: var(--red-soft); color: var(--red); border: 1px solid rgba(239,68,68,.2); }
+  .btn-danger:hover { background: rgba(239,68,68,.2); }
+  .btn-edit { background: rgba(99,102,241,0.12); color: var(--accent); border: 1px solid rgba(99,102,241,.2); }
+  .btn-edit:hover { background: rgba(99,102,241,.2); }
+
+  /* STATS */
   .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
   .stat-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px 20px; }
   .stat-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
@@ -94,23 +68,53 @@
   .stat-value.blue { color: var(--accent); }
   .stat-value.green { color: var(--green); }
   .stat-value.yellow { color: var(--yellow); }
-  .url-list { display: flex; flex-direction: column; gap: 8px; }
-  .url-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; gap: 14px; transition: all .18s; animation: slideIn .3s ease; }
-  @keyframes slideIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-  .url-card:hover { border-color: var(--accent); }
-  .url-indicator { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); flex-shrink: 0; }
-  .url-info { flex: 1; min-width: 0; }
-  .url-short { font-family: var(--mono); font-size: 13px; color: var(--accent); font-weight: 500; cursor: pointer; }
-  .url-short:hover { text-decoration: underline; }
-  .url-dest { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
-  .url-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-  .url-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-  .icon-btn { width: 32px; height: 32px; border-radius: 7px; border: 1px solid var(--card-border); background: transparent; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+
+  /* TOOLBAR */
+  .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
+  .toolbar-left { display: flex; align-items: center; gap: 10px; }
+  .toolbar-right { display: flex; align-items: center; gap: 10px; }
+  .search-input { background: var(--card); border: 1px solid var(--card-border); border-radius: 8px; padding: 8px 14px; color: var(--text); font-family: var(--font); font-size: 13px; outline: none; width: 220px; }
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--text-muted); }
+  .show-select { background: var(--card); border: 1px solid var(--card-border); border-radius: 8px; padding: 8px 12px; color: var(--text); font-family: var(--font); font-size: 13px; outline: none; cursor: pointer; }
+
+  /* TABLE */
+  .table-wrap { background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; }
+  thead { background: rgba(255,255,255,0.03); }
+  th { padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid var(--card-border); white-space: nowrap; }
+  td { padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  tr.selected td { background: var(--accent-soft); }
+
+  .cb { width: 16px; height: 16px; cursor: pointer; accent-color: var(--accent); }
+  .url-short-link { font-family: var(--mono); font-size: 12px; color: var(--accent); cursor: pointer; font-weight: 500; }
+  .url-short-link:hover { text-decoration: underline; }
+  .url-dest-text { font-size: 12px; color: var(--text-muted); max-width: 260px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .url-note { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .qr-mini { width: 36px; height: 36px; cursor: pointer; border-radius: 4px; }
+  .badge-lock { font-size: 10px; background: rgba(245,158,11,0.15); color: var(--yellow); border-radius: 4px; padding: 2px 6px; margin-left: 4px; }
+  .visit-count { font-family: var(--mono); font-size: 13px; color: var(--yellow); font-weight: 600; }
+  .created-text { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+  .action-btns { display: flex; gap: 6px; }
+  .icon-btn { width: 30px; height: 30px; border-radius: 6px; border: 1px solid var(--card-border); background: transparent; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; }
   .icon-btn:hover { background: rgba(255,255,255,0.08); }
   .icon-btn.copy:hover { background: var(--accent-soft); color: var(--accent); }
   .icon-btn.edit:hover { background: rgba(245,158,11,0.12); color: var(--yellow); }
   .icon-btn.delete:hover { background: var(--red-soft); color: var(--red); }
-  .icon-btn svg { width: 14px; height: 14px; }
+  .icon-btn svg { width: 13px; height: 13px; }
+
+  /* PAGINATION */
+  .pagination { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; flex-wrap: wrap; gap: 10px; }
+  .pagination-info { font-size: 13px; color: var(--text-muted); }
+  .pagination-btns { display: flex; gap: 6px; }
+  .page-btn { padding: 6px 14px; border-radius: 7px; border: 1px solid var(--card-border); background: var(--card); color: var(--text-dim); cursor: pointer; font-size: 13px; font-family: var(--font); transition: all .15s; }
+  .page-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .page-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .page-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  /* MODAL */
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.65); backdrop-filter: blur(4px); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .2s; }
   .modal-overlay.open { opacity: 1; pointer-events: all; }
   .modal { background: var(--card); border: 1px solid var(--card-border); border-radius: 16px; padding: 28px; width: 480px; max-width: 95vw; transform: scale(.96); transition: transform .2s; }
@@ -122,12 +126,18 @@
   .form-input:focus { border-color: var(--accent); }
   .form-input::placeholder { color: var(--text-muted); }
   .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; }
+
+  /* QR MODAL */
+  .qr-modal { text-align: center; }
+  .qr-modal canvas { border-radius: 12px; margin: 16px auto; display: block; }
+
+  /* TOAST */
   .toast { position: fixed; bottom: 28px; right: 28px; background: #1e2535; border: 1px solid var(--green); border-radius: 10px; padding: 12px 18px; font-size: 13.5px; font-weight: 500; color: var(--green); z-index: 999; display: flex; align-items: center; gap: 8px; transform: translateY(80px); opacity: 0; transition: all .3s cubic-bezier(.34,1.56,.64,1); pointer-events: none; }
   .toast.show { transform: translateY(0); opacity: 1; }
   .toast.error { border-color: var(--red); color: var(--red); }
+
   .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
   .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
-  .lock-badge { font-size: 10px; background: rgba(245,158,11,0.15); color: var(--yellow); border-radius: 4px; padding: 2px 6px; margin-left: 6px; }
 </style>
 </head>
 <body>
@@ -185,23 +195,56 @@
           <h1 class="page-title">Dashboard</h1>
           <button class="btn btn-primary" onclick="openAddModal()">+ Add New URL</button>
         </div>
+
         <div class="stats-bar">
           <div class="stat-card"><div class="stat-label">Total Links</div><div class="stat-value blue" id="stat-total">0</div></div>
           <div class="stat-card"><div class="stat-label">Active Links</div><div class="stat-value green" id="stat-active">0</div></div>
           <div class="stat-card"><div class="stat-label">Total Clicks</div><div class="stat-value yellow" id="stat-clicks">0</div></div>
         </div>
-        <div class="url-list" id="url-list"></div>
-        <div class="empty-state" id="empty-state" style="display:none">
-          <div class="icon">🔗</div>
-          <p>Belum ada short link. Buat yang pertama!</p>
-          <button class="btn btn-primary" onclick="openAddModal()">+ Add New URL</button>
+
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <span style="font-size:13px;color:var(--text-muted)">Show</span>
+            <select class="show-select" id="show-select" onchange="changeShow()">
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100" selected>100</option>
+            </select>
+            <button class="btn btn-edit" id="btn-edit-sel" style="display:none" onclick="editSelected()">✏️ Edit Link</button>
+            <button class="btn btn-danger" id="btn-del-sel" style="display:none" onclick="deleteSelected()">🗑️ Delete</button>
+          </div>
+          <div class="toolbar-right">
+            <input type="text" class="search-input" id="search-input" placeholder="Search URL..." oninput="renderTable()">
+          </div>
         </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th><input type="checkbox" class="cb" id="cb-all" onchange="toggleAll()"></th>
+                <th>URL</th>
+                <th>VISIT</th>
+                <th>CREATED ON</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody id="url-tbody"></tbody>
+          </table>
+          <div class="empty-state" id="empty-state" style="display:none">
+            <div class="icon">🔗</div>
+            <p>Belum ada short link. Buat yang pertama!</p>
+          </div>
+        </div>
+
+        <div class="pagination" id="pagination"></div>
       </div>
     </main>
   </div>
 </div>
 
-<!-- MODAL -->
+<!-- MODAL ADD/EDIT -->
 <div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
   <div class="modal">
     <h2 class="modal-title" id="modal-title">Add New URL</h2>
@@ -224,15 +267,30 @@
   </div>
 </div>
 
-<div class="toast" id="toast">
-  <span id="toast-icon">✓</span>
-  <span id="toast-msg">Berhasil!</span>
+<!-- MODAL QR -->
+<div class="modal-overlay" id="qr-modal" onclick="closeQROutside(event)">
+  <div class="modal qr-modal">
+    <h2 class="modal-title">QR Code</h2>
+    <div id="qr-container"></div>
+    <p id="qr-url" style="font-size:13px;color:var(--text-muted);margin-bottom:16px;word-break:break-all;"></p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeQR()">Tutup</button>
+      <button class="btn btn-primary" onclick="downloadQR()">⬇️ Download</button>
+    </div>
+  </div>
 </div>
 
+<div class="toast" id="toast"><span id="toast-icon">✓</span><span id="toast-msg">Berhasil!</span></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 const API = 'https://url-shortener-fec6.onrender.com';
 let token = localStorage.getItem('admin_token') || '';
 let editingAlias = null;
+let allLinks = [];
+let currentPage = 1;
+let showCount = 100;
+let selectedAliases = new Set();
 
 // ── LOGIN ──
 async function doLogin() {
@@ -251,9 +309,7 @@ async function doLogin() {
     } else {
       document.getElementById('login-error').style.display = 'block';
     }
-  } catch {
-    document.getElementById('login-error').style.display = 'block';
-  }
+  } catch { document.getElementById('login-error').style.display = 'block'; }
 }
 
 function doLogout() {
@@ -269,7 +325,6 @@ function showDashboard() {
   loadLinks();
 }
 
-// Cek kalau sudah login
 async function checkAuth() {
   if (!token) return;
   try {
@@ -283,47 +338,144 @@ async function loadLinks() {
   try {
     const res = await fetch(`${API}/api/links`, { headers: {'x-auth-token': token} });
     if (res.status === 401) { doLogout(); return; }
-    const links = await res.json();
-    renderLinks(links);
+    allLinks = await res.json();
+    updateStats();
+    renderTable();
   } catch { showToast('Gagal konek ke server!', 'error'); }
 }
 
-function renderLinks(links) {
-  const list = document.getElementById('url-list');
-  const empty = document.getElementById('empty-state');
-  document.getElementById('stat-total').textContent = links.length;
-  document.getElementById('stat-active').textContent = links.length;
-  document.getElementById('stat-clicks').textContent = links.reduce((s, l) => s + (l.clicks || 0), 0);
-  list.innerHTML = '';
-  if (links.length === 0) { empty.style.display = 'block'; return; }
-  empty.style.display = 'none';
-  links.forEach(link => {
-    const short = `https://klx.lat/${link.alias}`;
-    const card = document.createElement('div');
-    card.className = 'url-card';
-    card.innerHTML = `
-      <div class="url-indicator"></div>
-      <div class="url-info">
-        <span class="url-short" onclick="copyURL('${short}')">${short}</span>
-        ${link.password ? '<span class="lock-badge">🔒 Terkunci</span>' : ''}
-        <div class="url-dest">${link.dest}</div>
-        <div class="url-meta">👆 ${link.clicks || 0} klik</div>
-      </div>
-      <div class="url-actions">
-        <button class="icon-btn copy" onclick="copyURL('${short}')" title="Copy">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-        </button>
-        <button class="icon-btn edit" onclick="openEditModal('${link.alias}','${link.dest}')" title="Edit">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        </button>
-        <button class="icon-btn delete" onclick="deleteURL('${link.alias}')" title="Delete">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
-        </button>
-      </div>`;
-    list.appendChild(card);
-  });
+function updateStats() {
+  document.getElementById('stat-total').textContent = allLinks.length;
+  document.getElementById('stat-active').textContent = allLinks.length;
+  document.getElementById('stat-clicks').textContent = allLinks.reduce((s, l) => s + (l.clicks || 0), 0);
 }
 
+function renderTable() {
+  const search = document.getElementById('search-input').value.toLowerCase();
+  const filtered = allLinks.filter(l =>
+    l.alias.toLowerCase().includes(search) ||
+    l.dest.toLowerCase().includes(search)
+  );
+
+  const total = filtered.length;
+  const totalPages = Math.ceil(total / showCount);
+  if (currentPage > totalPages) currentPage = 1;
+  const start = (currentPage - 1) * showCount;
+  const pageLinks = filtered.slice(start, start + showCount);
+
+  const tbody = document.getElementById('url-tbody');
+  const empty = document.getElementById('empty-state');
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    document.getElementById('pagination').innerHTML = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  tbody.innerHTML = pageLinks.map(link => {
+    const short = `https://klx.lat/${link.alias}`;
+    const date = new Date(link.created_at).toLocaleString('id-ID', {day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    const isSelected = selectedAliases.has(link.alias);
+    return `
+      <tr class="${isSelected ? 'selected' : ''}" id="row-${link.alias}">
+        <td><input type="checkbox" class="cb" ${isSelected ? 'checked' : ''} onchange="toggleRow('${link.alias}', this.checked)"></td>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div id="qr-${link.alias}" style="cursor:pointer" onclick="showQR('${link.alias}','${short}')"></div>
+            <div>
+              <div>
+                <span class="url-short-link" onclick="copyURL('${short}')">${short}</span>
+                ${link.password ? '<span class="badge-lock">🔒</span>' : ''}
+              </div>
+              <div class="url-dest-text">${link.dest}</div>
+            </div>
+          </div>
+        </td>
+        <td><span class="visit-count">${link.clicks || 0}</span></td>
+        <td><span class="created-text">${date}</span></td>
+        <td>
+          <div class="action-btns">
+            <button class="icon-btn copy" onclick="copyURL('${short}')" title="Copy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+            <button class="icon-btn edit" onclick="openEditModal('${link.alias}','${link.dest}')" title="Edit">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+            <button class="icon-btn delete" onclick="deleteURL('${link.alias}')" title="Delete">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+            </button>
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+
+  // Generate QR mini
+  pageLinks.forEach(link => {
+    const short = `https://klx.lat/${link.alias}`;
+    const el = document.getElementById(`qr-${link.alias}`);
+    if (el && !el.querySelector('canvas')) {
+      new QRCode(el, { text: short, width: 36, height: 36, correctLevel: QRCode.CorrectLevel.L });
+    }
+  });
+
+  // Pagination
+  const pag = document.getElementById('pagination');
+  pag.innerHTML = `
+    <span class="pagination-info">Showing ${start + 1} to ${Math.min(start + showCount, total)} of ${total} entries${selectedAliases.size > 0 ? ` · <b>${selectedAliases.size} selected</b>` : ''}</span>
+    <div class="pagination-btns">
+      <button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>Previous</button>
+      ${Array.from({length: totalPages}, (_,i) => `<button class="page-btn ${i+1===currentPage?'active':''}" onclick="goPage(${i+1})">${i+1}</button>`).join('')}
+      <button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>Next</button>
+    </div>`;
+
+  updateSelectionUI();
+}
+
+function goPage(p) { currentPage = p; renderTable(); }
+function changeShow() { showCount = parseInt(document.getElementById('show-select').value); currentPage = 1; renderTable(); }
+
+// ── CHECKBOX ──
+function toggleRow(alias, checked) {
+  if (checked) selectedAliases.add(alias);
+  else selectedAliases.delete(alias);
+  const row = document.getElementById(`row-${alias}`);
+  if (row) row.className = checked ? 'selected' : '';
+  updateSelectionUI();
+}
+
+function toggleAll() {
+  const checked = document.getElementById('cb-all').checked;
+  const search = document.getElementById('search-input').value.toLowerCase();
+  const filtered = allLinks.filter(l => l.alias.toLowerCase().includes(search) || l.dest.toLowerCase().includes(search));
+  filtered.forEach(l => { if (checked) selectedAliases.add(l.alias); else selectedAliases.delete(l.alias); });
+  renderTable();
+}
+
+function updateSelectionUI() {
+  const n = selectedAliases.size;
+  document.getElementById('btn-edit-sel').style.display = n === 1 ? 'inline-flex' : 'none';
+  document.getElementById('btn-del-sel').style.display = n > 0 ? 'inline-flex' : 'none';
+}
+
+function editSelected() {
+  const alias = [...selectedAliases][0];
+  const link = allLinks.find(l => l.alias === alias);
+  if (link) openEditModal(link.alias, link.dest);
+}
+
+async function deleteSelected() {
+  if (!confirm(`Hapus ${selectedAliases.size} link yang dipilih?`)) return;
+  for (const alias of selectedAliases) {
+    await fetch(`${API}/api/links/${alias}`, { method: 'DELETE', headers: {'x-auth-token': token} });
+  }
+  selectedAliases.clear();
+  loadLinks();
+  showToast('Link berhasil dihapus!', 'error');
+}
+
+// ── MODAL ──
 function openAddModal() {
   editingAlias = null;
   document.getElementById('modal-title').textContent = 'Add New URL';
@@ -368,6 +520,7 @@ async function saveURL() {
     const data = await res.json();
     if (data.error) { showToast(data.error, 'error'); return; }
     closeModal();
+    selectedAliases.clear();
     loadLinks();
     showToast(editingAlias ? 'URL berhasil diupdate! ✓' : 'Short link berhasil dibuat! ✓');
   } catch { showToast('Gagal menyimpan!', 'error'); }
@@ -376,14 +529,34 @@ async function saveURL() {
 async function deleteURL(alias) {
   if (!confirm('Hapus short link ini?')) return;
   await fetch(`${API}/api/links/${alias}`, { method: 'DELETE', headers: {'x-auth-token': token} });
+  selectedAliases.delete(alias);
   loadLinks();
   showToast('Link dihapus!', 'error');
 }
 
-function copyURL(url) {
-  navigator.clipboard.writeText(url).then(() => showToast('Link disalin! 📋'));
+function copyURL(url) { navigator.clipboard.writeText(url).then(() => showToast('Link disalin! 📋')); }
+
+// ── QR ──
+let currentQRUrl = '';
+function showQR(alias, url) {
+  currentQRUrl = url;
+  document.getElementById('qr-container').innerHTML = '';
+  document.getElementById('qr-url').textContent = url;
+  new QRCode(document.getElementById('qr-container'), { text: url, width: 200, height: 200, correctLevel: QRCode.CorrectLevel.H });
+  document.getElementById('qr-modal').classList.add('open');
+}
+function closeQR() { document.getElementById('qr-modal').classList.remove('open'); }
+function closeQROutside(e) { if (e.target.id === 'qr-modal') closeQR(); }
+function downloadQR() {
+  const canvas = document.querySelector('#qr-container canvas');
+  if (!canvas) return;
+  const a = document.createElement('a');
+  a.download = 'qrcode.png';
+  a.href = canvas.toDataURL();
+  a.click();
 }
 
+// ── TOAST ──
 let toastTimer;
 function showToast(msg, type = 'success') {
   const t = document.getElementById('toast');
@@ -396,7 +569,7 @@ function showToast(msg, type = 'success') {
 }
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModal();
+  if (e.key === 'Escape') { closeModal(); closeQR(); }
   if (e.key === 'Enter' && document.getElementById('modal').classList.contains('open')) saveURL();
 });
 
